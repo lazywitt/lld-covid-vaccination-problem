@@ -11,7 +11,7 @@
 package main
 
 import (
-	cv "covid-vaccination/covid-vaccination"
+	cv "covid-vaccination/services"
 	"fmt"
 )
 
