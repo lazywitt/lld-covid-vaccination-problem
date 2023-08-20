@@ -71,6 +71,7 @@ func (s *BookingService) RegisterBooking(userId string, centerId string, day int
 
 	if capacity > bookingCount {
 		center.BookingCountPerDay[day]++
+		user.HasBooking = true
 		newBooking := &Booking{
 			Id:       uuid.New().String(),
 			Name:     user.Name,
@@ -90,7 +91,7 @@ func (s *BookingService) RegisterBooking(userId string, centerId string, day int
 }
 
 func (s *BookingService) CancelBooking(userId string) error {
-	user, err := s.UserService.GetUser("userId")
+	user, err := s.UserService.GetUser(userId)
 	if err != nil {
 		return err
 	}
@@ -110,7 +111,7 @@ func (s *BookingService) GetBookingsForCenterForDay(centerId string, day int) ([
 	bookings := []Booking{}
 	for i := 0; i < s.BookingCount; i++ {
 		booking := s.BookingData[i]
-		if booking.CenterId == centerId && booking.Day == day {
+		if booking.CenterId == centerId && booking.Day == day && !booking.IsCancelled {
 			bookings = append(bookings, *booking)
 		}
 	}
